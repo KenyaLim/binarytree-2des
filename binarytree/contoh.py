@@ -1,57 +1,33 @@
-class Node:
-    def __init__(self, data, parent):
-        self.data = data
-        self.parent= parent
-        self.left = None
-        self.right = None
-    def insert(self,data):
-        if data < self.data:
-            if self.left is None:
-                self.left = Node(data,self)
-            else:
-                self.left.insert(data)
-        elif data > self.data:
-            if self.right is None:
-                self.right = Node(data,self)
-            else:
-                self.right.insert(data)
-        else:
-            return False
-        return True
-    
-    class BinaryTree:
-        def __init__(self):
-            self.root = None
-            self.size = 0
-        def add(self,data):
-            if self.root.left is None and data%2 != 0:
-                self.root.left = Node(data,self.root)
-            elif self.root.right is None and data%2 == 0:
-                self.root.right = Node(data,self.root)
-        def sumGanjil(self, node,ganjil=[]):
-            if node is not None:
-                if node.data % 2 != 0 :
-                    ganjil.append(node.data)
-                self.sumGanjil(node.left, ganjil)
-                self.sumGanjil(node.right, ganjil)
-            return ganjil
-        def sumGenap(self, node, genap=[]):
-            if node is not None:
-                if node.data % 2 == 0 :
-                    genap.append(node.data)
-                self.sumGenap(node.left, genap)
-                self.sumGenap(node.right, genap)
-            return genap
-        def hasilGanjil(self):
-            hasil_ganjil = self.sumGanjil(self.root.left, [])
-            return f"Hasil: {sum(hasil_ganjil)}"
-        def hasilGenap(self):
-            hasil_genap = self.sumGenap(self.root.right, [])
-            return f"Hasil: {sum(hasil_genap)}"
-        
-if __name__ == "__main
+def plus_minus(self):
+    even = []
+    odd = []
+    level_map = {}
+    stack = [(self.root, 0)]  # Stack for manual traversal with levels
 
-bt = BinaryTree()
-bt.add(5)
-bt.add(3)
-            
+    while stack:  # Manual traversal
+        node, level = stack.pop()
+        if node is not None:
+            if level not in level_map:
+                level_map[level] = []
+            level_map[level].append(node.data)
+            stack.append((node.right, level + 1))
+            stack.append((node.left, level + 1))
+
+    for l in level_map:
+        if l % 2 == 0:
+            for v in level_map[l]:
+                even.append(v)
+        else:
+            for v in level_map[l]:
+                odd.append(v)
+
+    total_even = 0
+    for e in even:
+        total_even += e
+
+    total_odd = 0
+    for o in odd:
+        total_odd += o
+
+    result = total_even - total_odd
+    return result
