@@ -11,7 +11,7 @@ class Node:
                 self.left = Node(data, self)
             else:
                 self.left.insert(data)
-        elif data > self.data:
+        elif data >= self.data:
             if self.right is None:
                 self.right = Node(data, self)
             else:
@@ -20,51 +20,79 @@ class Node:
             return False
         return True
 
+    def operator(self):
+        return self.data
+    
+    def left(self):
+        return self.left
+    
+    def right(self):
+        return self.right
+    
+    def parent(self):
+        return self.parent
+    
+    def is_leaf(self):
+        return self.right == None and self.left == None
+    
+    def is_parent(self):
+        return self.parent == None
 
 class BinaryTree:
     def __init__(self):
         self.root = None
         self.size = 0
-
+    
     def add(self, data):
         if self.root is None:
             self.root = Node(data, None)
+            self.size += 1
         else:
-            if self.root.left is None and data % 2 != 0:
-                self.root.left = Node(data, self.root)
-            elif self.root.right is None and data % 2 == 0:
-                self.root.right = Node(data, self.root)
+            if self.root.insert(data):
+                self.size += 1
 
-    def sumGanjil(self, node, ganjil=[]):
+    def inorder(self, node):
         if node is not None:
-            if node.data % 2 != 0:
-                ganjil.append(node.data)
-            self.sumGanjil(node.left, ganjil)
-            self.sumGanjil(node.right, ganjil)
-        return ganjil
+            self.inorder(node.left)
+            print(node.data)
+            self.inorder(node.right)
+    
+    def get_root(self):
+        return self.root
 
-    def sumGenap(self, node, genap=[]):
-        if node is not None:
-            if node.data % 2 == 0:
-                genap.append(node.data)
-            self.sumGenap(node.left, genap)
-            self.sumGenap(node.right, genap)
-        return genap
+    def plus_minus(self):
+        even_sum = 0
+        odd_sum = 0
+        level_map = {}
 
-    def hasilGanjil(self):
-        hasil_ganjil = self.sumGanjil(self.root.left, [])
-        return f"Hasil: {sum(hasil_ganjil)}"
+        def traverse_with_level(node, level):
+            if node is not None:
+                traverse_with_level(node.left, level + 1)
+                if level not in level_map:
+                    level_map[level] = []
+                level_map[level].append(node.data)
+                traverse_with_level(node.right, level + 1)
 
-    def hasilGenap(self):
-        hasil_genap = self.sumGenap(self.root.right, [])
-        return f"Hasil: {sum(hasil_genap)}"
+        traverse_with_level(self.root, 0)
+        
+        for level, values in level_map.items():
+            if level % 2 == 0:
+                even_sum += sum(values)
+            else:
+                odd_sum += sum(values)
+        
+        return even_sum - odd_sum
 
-
-if __name__ == "__main__":
-    bt = BinaryTree()
-    bt.add(5)
-    bt.add(3)
-    bt.add(4)
-    bt.add(2)
-    print(bt.hasilGanjil())
-    print(bt.hasilGenap())
+if __name__ == '__main__':
+    binaryT = BinaryTree()
+    binaryT.add(5)
+    binaryT.add(4)
+    binaryT.add(3)
+    binaryT.add(9)
+    binaryT.add(8)
+    binaryT.add(6)
+    binaryT.add(7)
+    binaryT.add(11)
+    binaryT.add(10)
+    print()
+    print(binaryT.plus_minus())
