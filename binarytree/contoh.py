@@ -2,9 +2,9 @@ def plus_minus(self):
     even = []
     odd = []
     level_map = {}
-    stack = [(self.root, 0)]  # Stack for manual traversal with levels
+    stack = [(self.root, 0)]
 
-    while stack:  # Manual traversal
+    while stack:
         node, level = stack.pop()
         if node is not None:
             if level not in level_map:
